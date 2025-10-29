@@ -1,0 +1,9 @@
+# Evaluation datasets for English freq reranker checkpoints.
+split: test
+datasets:
+  - dataset_name: "hotchpotch/msmarco-context-relevance"
+    subset: "freq2"
+  - dataset_name: "hotchpotch/natural-questions-context-relevance"
+    subset: "nodup_freq2"
+  - dataset_name: "hotchpotch/gooaq-context-relevance-130k"
+    subset: "default"

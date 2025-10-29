@@ -1,0 +1,111 @@
+model_args:
+  model_name_or_path: "cl-nagoya/ruri-v3-reranker-310m"
+  classifier_dropout: 0.0
+
+data_args:
+  datasets:
+    -
+      dataset_name: "hotchpotch/msmarco-context-relevance"
+      subset: "freq2"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+    -
+      items: 6
+      dataset_name: "hotchpotch/natural-questions-context-relevance"
+      subset: "nodup_freq2"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+    -
+      items: 6
+      dataset_name: "hotchpotch/gooaq-context-relevance-130k"
+      subset: "default"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+    -
+      dataset_name: "hotchpotch/japanese-context-relevance"
+      subset: "msmarco-ja-freq2"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+    -
+      dataset_name: "hotchpotch/japanese-context-relevance"
+      subset: "auto-wiki-qa-nemotron"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+    -
+      dataset_name: "hotchpotch/japanese-context-relevance"
+      subset: "jaquad-freq2"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+    -
+      dataset_name: "hotchpotch/japanese-context-relevance"
+      subset: "jqara"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+      upsample_factor: 4.0
+    -
+      dataset_name: "hotchpotch/japanese-context-relevance"
+      subset: "jsquad-freq2"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+    -
+      dataset_name: "hotchpotch/japanese-context-relevance"
+      subset: "miracl"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+      upsample_factor: 2.0
+    -
+      dataset_name: "hotchpotch/japanese-context-relevance"
+      subset: "mkqa"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+      upsample_factor: 2.0
+    -
+      dataset_name: "hotchpotch/japanese-context-relevance"
+      subset: "mr-tydi"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+      upsample_factor: 2.0
+    -
+      dataset_name: "hotchpotch/japanese-context-relevance"
+      subset: "quiz-no-mori"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+    -
+      dataset_name: "hotchpotch/japanese-context-relevance"
+      subset: "quiz-works"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+    -
+      dataset_name: "hotchpotch/japanese-context-relevance"
+      subset: "JFWIR"
+      teacher_column: "teacher_scores.ruri-v3-reranker-310m"
+
+
+training_args:
+  overwrite_output_dir: true
+  optimizer: "adafactor"
+
+  # Training parameters
+  learning_rate: 5.0e-5
+  # The Japanese model produces stable and well-balanced scores with a batch size of 256.
+  per_device_train_batch_size: 2 # If GPU memory is not enough, try reducing this value.
+  gradient_accumulation_steps: 128
+  max_grad_norm: 1.0
+
+  # Optimizer and scheduler
+  weight_decay: 0.01
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+
+  # Logging and saving
+  logging_steps: 100
+  save_steps: 500
+  save_total_limit: 5
+
+  # Mixed precision
+  fp16: false
+  bf16: true
+
+  # Other settings
+  dataloader_num_workers: 8
+  load_best_model_at_end: true
+  num_train_epochs: 1
+
+  # eval
+  per_device_eval_batch_size: 16
+  eval_steps: 500
+
+  # Reporting
+  report_to: ["wandb"]
+
+  eval_datasets:
+    config: configs/eval_datasets/ja.yaml
+    threshold: 0.1
+    batch_size: 16

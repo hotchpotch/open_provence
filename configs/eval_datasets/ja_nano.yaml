@@ -1,0 +1,45 @@
+# Nano evaluation slice aligned with freq datasets (first 100 examples per dataset).
+split: test
+datasets:
+  - dataset_name: "hotchpotch/msmarco-context-relevance"
+    subset: "freq2"
+    n_samples: 100
+  - dataset_name: "hotchpotch/natural-questions-context-relevance"
+    subset: "nodup_freq2"
+    n_samples: 100
+  - dataset_name: "hotchpotch/gooaq-context-relevance-130k"
+    subset: "default"
+    n_samples: 100
+  - dataset_name: "hotchpotch/japanese-context-relevance"
+    subset: "msmarco-ja-freq2"
+    n_samples: 100
+  - dataset_name: "hotchpotch/japanese-context-relevance"
+    subset: "auto-wiki-qa-nemotron"
+    n_samples: 100
+  - dataset_name: "hotchpotch/japanese-context-relevance"
+    subset: "jaquad-freq2"
+    n_samples: 100
+  - dataset_name: "hotchpotch/japanese-context-relevance"
+    subset: "jqara"
+    n_samples: 100
+  - dataset_name: "hotchpotch/japanese-context-relevance"
+    subset: "jsquad-freq2"
+    n_samples: 100
+  - dataset_name: "hotchpotch/japanese-context-relevance"
+    subset: "miracl"
+    n_samples: 100
+  - dataset_name: "hotchpotch/japanese-context-relevance"
+    subset: "mkqa"
+    n_samples: 100
+  - dataset_name: "hotchpotch/japanese-context-relevance"
+    subset: "mr-tydi"
+    n_samples: 100
+  - dataset_name: "hotchpotch/japanese-context-relevance"
+    subset: "quiz-no-mori"
+    n_samples: 100
+  - dataset_name: "hotchpotch/japanese-context-relevance"
+    subset: "quiz-works"
+    n_samples: 100
+  - dataset_name: "hotchpotch/japanese-context-relevance"
+    subset: "JFWIR"
+    n_samples: 100

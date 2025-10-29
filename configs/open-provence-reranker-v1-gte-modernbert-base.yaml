@@ -1,0 +1,62 @@
+model_args:
+  model_name_or_path: "Alibaba-NLP/gte-reranker-modernbert-base"
+  classifier_dropout: 0.0
+
+data_args:
+  datasets:
+    -
+      dataset_name: "hotchpotch/msmarco-context-relevance"
+      subset: "freq2"
+      teacher_column: "teacher_scores.gte-reranker-modernbert-base"
+    -
+      dataset_name: "hotchpotch/natural-questions-context-relevance"
+      subset: "nodup_freq2"
+      teacher_column: "teacher_scores.gte-reranker-modernbert-base"
+      items: 6
+    -
+      dataset_name: "hotchpotch/gooaq-context-relevance-130k"
+      subset: "default"
+      teacher_column: "teacher_scores.gte-reranker-modernbert-base"
+      items: 6
+
+
+training_args:
+  overwrite_output_dir: true
+  optimizer: "adafactor"
+
+  # Training parameters
+  learning_rate: 5.0e-5
+  per_device_train_batch_size: 4 # If GPU memory is not enough, try reducing this value.
+  gradient_accumulation_steps: 64
+  max_grad_norm: 1.0
+
+  # Optimizer and scheduler
+  weight_decay: 0.01
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+
+  # Logging and saving
+  logging_steps: 100
+  save_steps: 500
+  save_total_limit: 5
+
+  # Mixed precision
+  fp16: false
+  bf16: true
+
+  # Other settings
+  dataloader_num_workers: 8
+  load_best_model_at_end: true
+  num_train_epochs: 1
+
+  # eval
+  per_device_eval_batch_size: 16
+  eval_steps: 500
+
+  # Reporting
+  report_to: ["wandb"]
+
+  eval_datasets:
+    config: configs/eval_datasets/en.yaml
+    threshold: 0.1
+    batch_size: 32

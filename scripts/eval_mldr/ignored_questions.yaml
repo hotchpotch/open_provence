@@ -1,0 +1,239 @@
+en:
+- qid: q-en-2
+  question: What type of coating do ZM1130 - ZM1132 have?
+  reason: Positive passage length exceeds limit (226954 characters > 60000). Automatically
+    flagged.
+- qid: q-en-18
+  question: What are some unique dishes in Uttarakhand?
+  reason: Positive passage length exceeds limit (77141 characters > 60000). Automatically
+    flagged.
+- qid: q-en-30
+  question: What position did he finish on the season's leading run-getters list?
+  reason: Positive passage length exceeds limit (62404 characters > 60000). Automatically
+    flagged.
+- qid: q-en-47
+  question: Who did Burnham realize he could not win with support from?
+  reason: Positive passage length exceeds limit (63814 characters > 60000). Automatically
+    flagged.
+- qid: q-en-58
+  question: Where does the first free-flight test of the Dream Chaser take place?
+  reason: Positive passage length exceeds limit (64718 characters > 60000). Automatically
+    flagged.
+- qid: q-en-66
+  question: What are some examples of international films that Buñuel was involved
+    in during the period of 1954-1960?
+  reason: Positive passage length exceeds limit (70495 characters > 60000). Automatically
+    flagged.
+- qid: q-en-76
+  question: Who replaced Prost at Williams?
+  reason: Positive passage length exceeds limit (82053 characters > 60000). Automatically
+    flagged.
+- qid: q-en-124
+  question: What score did Cameron receive in favor of lesbian, gay and bisexual equality
+    in 2010?
+  reason: Positive passage length exceeds limit (81557 characters > 60000). Automatically
+    flagged.
+- qid: q-en-126
+  question: What is generally credited as the first "Special Edition" release to home
+    video?
+  reason: Positive passage length exceeds limit (60753 characters > 60000). Automatically
+    flagged.
+- qid: q-en-146
+  question: Who won his first ever MotoGP race?
+  reason: Positive passage length exceeds limit (122082 characters > 60000). Automatically
+    flagged.
+- qid: q-en-172
+  question: When was Radioland Murders released?
+  reason: Positive passage length exceeds limit (103525 characters > 60000). Automatically
+    flagged.
+- qid: q-en-224
+  question: What can be found in the list of television movies and episodes?
+  reason: Positive passage length exceeds limit (65478 characters > 60000). Automatically
+    flagged.
+- qid: q-en-229
+  question: When was the object with the ID 338737 discovered?
+  reason: Positive passage length exceeds limit (124097 characters > 60000). Automatically
+    flagged.
+- qid: q-en-292
+  question: What is one reason for the perceived failure of social services to work
+    with the Somali community in London?
+  reason: Positive passage length exceeds limit (65770 characters > 60000). Automatically
+    flagged.
+- qid: q-en-366
+  question: What is the test method for measuring the pour point of petroleum?
+  reason: Positive passage length exceeds limit (83698 characters > 60000). Automatically
+    flagged.
+- qid: q-en-375
+  question: When did Stewart propose marriage to deHavilland?
+  reason: Positive passage length exceeds limit (65723 characters > 60000). Automatically
+    flagged.
+- qid: q-en-392
+  question: Who won the Football League One Manager of the Month award in the first
+    week of April?
+  reason: Positive passage length exceeds limit (63742 characters > 60000). Automatically
+    flagged.
+- qid: q-en-400
+  question: Who had taken over large parts of Richard's continental domains?
+  reason: Positive passage length exceeds limit (63650 characters > 60000). Automatically
+    flagged.
+- qid: q-en-401
+  question: What are the potential consequences of tougher immigration enforcement?
+  reason: Positive passage length exceeds limit (92743 characters > 60000). Automatically
+    flagged.
+- qid: q-en-462
+  question: How many pilots did No. 257 Squadron lose in the crash landing after combat
+    with Bf 110s?
+  reason: Positive passage length exceeds limit (78120 characters > 60000). Automatically
+    flagged.
+- qid: q-en-470
+  question: What determines the health of the U.S.?
+  reason: Positive passage length exceeds limit (92438 characters > 60000). Automatically
+    flagged.
+- qid: q-en-473
+  question: What did Čabrinović throw at the car?
+  reason: Positive passage length exceeds limit (135880 characters > 60000). Automatically
+    flagged.
+- qid: q-en-522
+  question: What was the reason for terminating the contract between Williams and
+    Zanardi?
+  reason: Positive passage length exceeds limit (70437 characters > 60000). Automatically
+    flagged.
+- qid: q-en-553
+  question: What kind of environment is suggested to be the place where tetrapods
+    evolved?
+  reason: Positive passage length exceeds limit (65680 characters > 60000). Automatically
+    flagged.
+- qid: q-en-330
+  question: Who did Anderson defeat the following week?
+  reason: 'question is malformed/ill-posed: ''the following week'' lacks a clear anchor
+    or reference in the question or passages; cannot determine which week is meant.'
+- qid: q-en-388
+  question: What were the original anchors of the mall?
+  reason: 'Ambiguous question: ''the mall'' is not specified among multiple malls
+    listed; cannot determine which mall''s original anchors are being asked about.'
+jp:
+- qid: q-ja-15
+  question: ることもあるのでしょうか？
+  reason: question is a fragment/incoherent and lacks a clear, answerable query
+- qid: q-ja-75
+  question: が制作した木版画が使用された。この木版画は、日本の伝統的な木版画とは異なる西洋の技法を取り入れたものであり、当時の印刷技術の進化を象徴している。この木版画はどのような特徴を持っているのですか？
+  reason: 'The question text is incoherent/malformed: it begins with ''が制作した'' without
+    a clear subject, making the intent unusable.'
+- qid: q-ja-59
+  question: れのジャンルにまたがっており、クラシック音楽からポップス、ジャズ、ロックまで幅広いスタイルがあります。作曲家は多くの場合、自身の感情や経験を音楽に反映させていますが、この作曲家の音楽にはどのようなテーマや要素が特に顕著に現れているのでしょうか？
+  reason: Question text is incoherent/malformed (starts mid-sentence and lacks a clear
+    subject)
+- qid: q-ja-16
+  question: は、荒木の絵画スタイルについてどのような影響を与えていますか？
+  reason: question text is incoherent or missing essential words
+- qid: q-ja-36
+  question: が地球の公転軌道上を移動する速度が遅い場合、皆既食の観測時間はどのように変化するのでしょうか？
+  reason: question text is incoherent or missing essential words
+- qid: q-ja-76
+  question: は呼ばれ、チャンピオンズリーグの象徴とされています。ビッグイヤーの永久保持を認められるためにはどのような条件を満たす必要があるのでしょうか？
+  reason: question text is incoherent or missing essential words
+- qid: q-ja-146
+  question: の学究的理論はどのような内容でしたか？
+  reason: question text is incoherent or missing essential words
+- qid: q-ja-153
+  question: の航空機においては）、主翼を支持するための構造物も含まれることがある。この胴体の設計や構造に関して、どのような工夫がされているのですか？
+  reason: question text is incoherent or missing essential words (appears to be a
+    fragment)
+- qid: q-ja-189
+  question: ンケ族（23.8%、2000年）など、様々な民族から構成されています。また、他にもマリ人、ソウシウ族、クルマ族なども存在します。
+  reason: question is a fragment with no clear query and is unusable
+- qid: q-ja-211
+  question: 作り出すことは可能でしょうか？
+  reason: 'question is malformed/unclear: lacks a clear object or referent to ''create''
+    and is not answerable from the given passages'
+- qid: q-ja-206
+  question: 置があると言えますか？
+  reason: question is incoherent or missing essential content; unclear what is being
+    asked
+- qid: q-ja-212
+  question: の映画『鏡』にも感銘を受けたという。武満は映画が音楽に与える影響についても研究し、自身の作曲に取り入れることもあった。
+  reason: malformed/incomplete question fragment lacking a clear prompt (subject missing)
+- qid: q-ja-237
+  question: しています。この傾向は、現代社会において宗教の役割がどのように変化しているのかを考えさせられます。なぜ最近では、信仰する宗教が特に無いという人々が増えているのでしょうか？
+  reason: question text is incoherent or missing essential words
+- qid: q-ja-275
+  question: た後の飽和状態に達するのにどれくらいの時間がかかるのか知りたいですか？
+  reason: 'The question is malformed/incoherent: it starts with ''た後'' lacking a clear
+    antecedent, making it impossible to determine what saturation time refers to.'
+- qid: q-ja-308
+  question: は、シェイク・モハメドの言葉に同意しますか？
+  reason: question text is incoherent or missing essential words
+- qid: q-ja-297
+  question: らの謁見を受けることが慣例とされていました。
+  reason: incomplete fragment; the question lacks a clear subject and interrogative
+    form, making it ill-formed/unusable
+- qid: q-ja-443
+  question: を目指す」という言葉を掲げていたが、この批判の背後には具体的にどのような問題があったのでしょうか？
+  reason: question text is incoherent or missing essential words
+- qid: q-ja-508
+  question: われていますか？
+  reason: The question text is incoherent/incomplete (a fragment in Japanese) and
+    lacks a clear interrogative form or context.
+- qid: q-ja-618
+  question: むね1時間に何本程運行されていますか？
+  reason: the question text is garbled/incoherent (missing clear subject or target
+    station; likely intended '豊橋駅' but 'むね' is unclear)
+- qid: q-ja-714
+  question: においても使用された。この時期の新幹線車両の改良は、より高速で快適な輸送を実現するために行われた。
+  reason: question is malformed or incomplete (fragment) and has no clear prompt
+- qid: q-ja-726
+  question: フェがオープンしましたか？
+  reason: question text is incoherent or incomplete (fragmentary question lacking
+    a clear subject/object)
+- qid: q-ja-771
+  question: 地化することが計画されていましたか？
+  reason: 'question is malformed/unclear: ''地化することが計画されていましたか？'' lacks a clear subject/referent
+    and does not form a complete, answerable question based on the given passages.'
+- qid: q-ja-754
+  question: ありますか？
+  reason: 'question is malformed/incomplete: ''ありますか？'' lacks a clear topic or query;
+    cannot determine what is being asked.'
+- qid: q-ja-832
+  question: が、福岡県内に鉄道敷設の必要性を訴えました。この背景には、地方の経済発展や人の移動の便益が期待されていました。しかし、大鉄道会社は地方への鉄道敷設に消極的であり、地方の要望と会社の方針との間には溝が生じていました。この状況を考慮すると、地方の要望を満たすためにはどのような解決策が考えられるのでしょうか？
+  reason: 'Question is malformed/incomplete: it starts with a conjunction and lacks
+    a clear subject/agent for who advocated railway construction in Fukuoka, making
+    it not self-contained or fully understandable.'
+- qid: q-ja-801
+  question: ムは、現代のサッカー戦術においても重要な役割を果たしていますか？
+  reason: The question text is incoherent/truncated ('ムは' lacks a clear referent),
+    making it unusable.
+- qid: q-ja-1019
+  question: の城門は、どのような目的で作られたのですか？
+  reason: 'The question is malformed / incomplete: it uses ''の城門'' without a visible
+    subject (no noun before の), making it incoherent.'
+- qid: q-ja-991
+  question: えました。この時点で、ランドはソ連に不信感を持っていましたか？
+  reason: 'Malformed/incoherent question: the text begins with an incomplete fragment
+    ''えました。'', lacks a clear subject, and cannot be meaningfully answered from the
+    provided passages.'
+- qid: q-ja-1071
+  question: で切り詰めたデザインに変更された。この変更の背後にある意図や理由は何ですか？
+  reason: 'question is malformed / incomplete: starts with a dependent clause ''で切り詰めたデザインに変更された''
+    without a clear subject or context; lacks essential words to form a complete question.'
+- qid: q-ja-1131
+  question: れる傾向がある。この成長の急激な変化は、ティラノサウルス科の生態や生物学的な特徴について何か示唆していますか？
+  reason: question text is incoherent or incomplete (starts mid-sentence; essential
+    words missing)
+- qid: q-ja-1164
+  question: ーの熱膨張率は何故他の木材よりも大きいのですか？
+  reason: 'question is malformed/incomplete: the topic before の is missing (represented
+    by a dash), making the query incoherent.'
+- qid: q-ja-1227
+  question: はどのような手段を取ったのでしょうか？
+  reason: 'question is malformed/incoherent: missing subject to reference (lacks a
+    clear target to answer about)'
+- qid: q-ja-1205
+  question: を学んだりするのを見ると、なんだか自分の中にも、彼らのようなものがあるような気がして、ちょっとした自信をもってしまう。」
+  reason: question text is incoherent or missing essential words
+- qid: q-ja-1323
+  question: などに運行されていますか？
+  reason: question text is incoherent or missing essential words
+- qid: q-ja-1271
+  question: マの絶対数が最も多い理由は何ですか？
+  reason: question text is incoherent or incomplete (the subject appears truncated,
+    e.g., likely intended 'ロマ' but missing the initial characters)

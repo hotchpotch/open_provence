@@ -82,8 +82,8 @@ Pruned context:
 Next spring I'm planning a trip to Japan so I can wander Kyoto's markets and taste every regional dish I find.
 Sushi is honestly my favourite—I want to grab a counter seat and let the chef serve endless nigiri until I'm smiling through soy sauce.
 
-Reranking score: 0.6391
-Compression rate: 44.12
+Reranking score: 0.6448
+Compression rate: 44.37
 ```
 
 Passing a single string returns the pruned text plus scalar scores. Switch `model_name` to `"hotchpotch/open-provence-reranker-v1-gte-modernbert-base"` for the English checkpoint or any other published run. In practice you can batch hundreds of question–context pairs at once to maximise GPU throughput.

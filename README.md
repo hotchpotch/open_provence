@@ -3,6 +3,7 @@
 > ✂️ Lightweight Provence-style rerankers that keep the answers and drop the noise for retrieval-augmented generation.
 
 <p align="left">
+  <a href="https://huggingface.co/spaces/hotchpotch/open_provence_demo">🤗 Spaces WebUI Demo</a> ·
   <a href="docs/eval_reports/open_provence_v1_eval_report.md">Evaluation Report</a> ·
   <a href="docs/train.md">Training Guide</a> ·
   <a href="docs/create_context_relevance_dataset.md">Dataset Pipeline</a>

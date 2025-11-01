@@ -33,7 +33,11 @@ jobs:
         run: uv sync --locked --no-default-groups --group dev --group cpu
 
       - name: Download NLTK resources
-        run: uv run python -c "import nltk; nltk.download('punkt', quiet=True); nltk.download('punkt_tab', quiet=True)"
+        run: |
+          # Use the virtualenv interpreter directly so CI never pulls NVIDIA/CUDA extras via `uv run`.
+          ./.venv/bin/python -c "import nltk; nltk.download('punkt', quiet=True); nltk.download('punkt_tab', quiet=True)"
 
       - name: Run tox
-        run: uv run tox run-parallel
+        run: |
+          # Invoke tox from the synced virtualenv to reuse locked deps; keep `run-parallel` for CI throughput.
+          ./.venv/bin/tox run-parallel

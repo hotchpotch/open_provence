@@ -1317,7 +1317,8 @@ class OpenProvencePreTrainedModel(PreTrainedModel):
     ) -> None:
         _ensure_transformers_logging_configured()
 
-        model_kwargs.pop("device", None)
+        cleaned_kwargs = dict(model_kwargs)
+        cleaned_kwargs.pop("device", None)
 
         resolved_device: torch.device | None = None
         if device is not None:
@@ -1329,7 +1330,7 @@ class OpenProvencePreTrainedModel(PreTrainedModel):
                     f"Invalid device specification for {class_name}: {device!r}"
                 ) from exc
 
-        super().__init__(config, *model_args, **model_kwargs)
+        super().__init__(config, *model_args, **cleaned_kwargs)
         self.max_length = config.max_length
         self.num_labels = config.num_labels
         self.num_pruning_labels = config.num_pruning_labels

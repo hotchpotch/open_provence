@@ -1308,9 +1308,30 @@ class OpenProvencePreTrainedModel(PreTrainedModel):
     config_class = OpenProvenceConfig
     base_model_prefix = "open_provence"
 
-    def __init__(self, config: OpenProvenceConfig) -> None:
+    def __init__(
+        self,
+        config: OpenProvenceConfig,
+        *model_args: Any,
+        device: str | torch.device | None = None,
+        **model_kwargs: Any,
+    ) -> None:
         _ensure_transformers_logging_configured()
-        super().__init__(config)
+
+        if device is None and "device" in model_kwargs:
+            device = model_kwargs.pop("device")
+        else:
+            model_kwargs.pop("device", None)
+
+        resolved_device: torch.device | None = None
+        if device is not None:
+            try:
+                resolved_device = resolve_inference_device(device)
+            except ValueError as exc:
+                raise ValueError(
+                    f"Invalid device specification for OpenProvenceModel: {device!r}"
+                ) from exc
+
+        super().__init__(config, *model_args, **model_kwargs)
         self.max_length = config.max_length
         self.num_labels = config.num_labels
         self.num_pruning_labels = config.num_pruning_labels
@@ -1327,6 +1348,9 @@ class OpenProvencePreTrainedModel(PreTrainedModel):
         self._update_tokenizer_runtime()
         self.default_threshold = self._resolve_default_threshold(config)
         self.eval()
+
+        if resolved_device is not None:
+            self.to(device=resolved_device)
 
     def _build_base_model_config(self, config: OpenProvenceConfig) -> PretrainedConfig:
         if config.base_model_config:
@@ -1407,14 +1431,14 @@ class OpenProvencePreTrainedModel(PreTrainedModel):
                 "OpenProvenceConfig.default_threadshold must be numeric when provided."
             ) from exc
 
-    def to(self, *args: Any, **kwargs: Any) -> OpenProvenceModel:  # type: ignore[override]
+    def to(self, *args: Any, **kwargs: Any) -> OpenProvencePreTrainedModel:  # type: ignore[override]
         result = super().to(*args, **kwargs)
         candidate = kwargs.get("device") if kwargs else None
         if candidate is None and args:
             candidate = args[0]
         if candidate is not None:
             self._runtime_device = torch.device(candidate)
-        return cast("OpenProvenceModel", result)
+        return cast("OpenProvencePreTrainedModel", result)
 
     def get_input_embeddings(self):
         return self.ranking_model.get_input_embeddings()
@@ -1444,8 +1468,14 @@ class OpenProvencePreTrainedModel(PreTrainedModel):
 class OpenProvenceModel(OpenProvencePreTrainedModel):
     """Lightweight wrapper around the Provence reranker checkpoint."""
 
-    def __init__(self, config: OpenProvenceConfig) -> None:
-        super().__init__(config)
+    def __init__(
+        self,
+        config: OpenProvenceConfig,
+        *model_args: Any,
+        device: str | torch.device | None = None,
+        **model_kwargs: Any,
+    ) -> None:
+        super().__init__(config, *model_args, device=device, **model_kwargs)
         self.default_splitter_language = DEFAULT_SPLITTER_LANGUAGE
         self._update_tokenizer_runtime()
         self._update_runtime_defaults()
@@ -3782,8 +3812,14 @@ class OpenProvenceForSequenceClassification(OpenProvenceModel):
 class OpenProvenceForTokenClassification(OpenProvenceModel):
     """Token classification wrapper that exposes pruning logits."""
 
-    def __init__(self, config: OpenProvenceConfig) -> None:
-        super().__init__(config)
+    def __init__(
+        self,
+        config: OpenProvenceConfig,
+        *model_args: Any,
+        device: str | torch.device | None = None,
+        **model_kwargs: Any,
+    ) -> None:
+        super().__init__(config, *model_args, device=device, **model_kwargs)
         self.num_labels = config.num_pruning_labels
 
     def forward(

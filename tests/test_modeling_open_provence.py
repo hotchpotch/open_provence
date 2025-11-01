@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from types import SimpleNamespace
 from typing import Any
 
 import nltk
 import numpy as np
 import pytest
 import torch
+import torch.nn as nn
 from open_provence import modeling_open_provence_standalone as standalone
 from open_provence.modeling_open_provence_standalone import (
     DEFAULT_ENGLISH_SENTENCE_MAX_CHARS,
@@ -136,6 +138,61 @@ class DoubleSepTokenizer(DummyTokenizer):
         if tokens_b:
             return [0] * (len(tokens_a) + 3) + [1] * (len(tokens_b) + 1)
         return [0] * (len(tokens_a) + 3)
+
+
+@pytest.fixture
+def minimal_model_config(monkeypatch):
+    class TinyBackbone(nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.embeddings = nn.Embedding(32, 4)
+            self.config = SimpleNamespace(hidden_size=4)
+
+        def forward(self, *args: Any, **kwargs: Any):  # pragma: no cover - not exercised here
+            raise NotImplementedError
+
+        def get_input_embeddings(self):
+            return self.embeddings
+
+        def set_input_embeddings(self, value):
+            self.embeddings = value
+
+    monkeypatch.setattr(
+        standalone.AutoModelForSequenceClassification,
+        "from_config",
+        lambda config: TinyBackbone(),
+    )
+    monkeypatch.setattr(
+        standalone.AutoTokenizer,
+        "from_pretrained",
+        lambda reference: DummyTokenizer(),
+    )
+
+    return OpenProvenceConfig(
+        base_model_config={
+            "model_type": "bert",
+            "vocab_size": 32,
+            "hidden_size": 4,
+            "num_hidden_layers": 1,
+            "num_attention_heads": 1,
+            "intermediate_size": 4,
+        },
+        tokenizer_name_or_path="dummy-tokenizer",
+        pruning_config={"hidden_size": 4},
+        max_length=16,
+    )
+
+
+def test_model_init_accepts_device_kwarg(minimal_model_config):
+    model = OpenProvenceModel(minimal_model_config, device="cpu")
+
+    assert model._runtime_device.type == "cpu"
+    assert next(model.parameters()).device.type == "cpu"
+
+
+def test_model_init_rejects_unknown_device(minimal_model_config):
+    with pytest.raises(ValueError, match="Invalid device specification"):
+        OpenProvenceModel(minimal_model_config, device="accelerator-42")
 
 
 def test_config_parses_default_threadshold() -> None:

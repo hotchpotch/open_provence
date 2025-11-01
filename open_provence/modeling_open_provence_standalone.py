@@ -1317,18 +1317,16 @@ class OpenProvencePreTrainedModel(PreTrainedModel):
     ) -> None:
         _ensure_transformers_logging_configured()
 
-        if device is None and "device" in model_kwargs:
-            device = model_kwargs.pop("device")
-        else:
-            model_kwargs.pop("device", None)
+        model_kwargs.pop("device", None)
 
         resolved_device: torch.device | None = None
         if device is not None:
             try:
                 resolved_device = resolve_inference_device(device)
             except ValueError as exc:
+                class_name = self.__class__.__name__
                 raise ValueError(
-                    f"Invalid device specification for OpenProvenceModel: {device!r}"
+                    f"Invalid device specification for {class_name}: {device!r}"
                 ) from exc
 
         super().__init__(config, *model_args, **model_kwargs)

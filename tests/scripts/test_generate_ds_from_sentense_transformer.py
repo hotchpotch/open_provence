@@ -39,7 +39,7 @@ def test_generate_from_local_dataset(tmp_path):
         "--dataset",
         str(source_path),
         "--lang",
-        "generic",
+        "en",
         "--output-root",
         str(output_root),
         "--overwrite",

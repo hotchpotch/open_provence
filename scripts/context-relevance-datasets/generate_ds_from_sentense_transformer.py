@@ -19,7 +19,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import cast
 
-from datasets import Dataset, DatasetDict, load_dataset
+from datasets import Dataset, DatasetDict, load_dataset, load_from_disk
 
 try:
     from fast_bunkai import FastBunkai  # type: ignore
@@ -331,8 +331,13 @@ def main() -> None:
     splitter = resolve_sentence_splitter(args.lang)
     dataset_slug = slugify_dataset_name(args.dataset, args.subset)
 
-    logging.info("Loading dataset %s (subset=%s)", args.dataset, args.subset)
-    dataset_dict = load_dataset(args.dataset, args.subset)
+    dataset_path = Path(args.dataset)
+    if dataset_path.exists():
+        logging.info("Loading local dataset from %s", dataset_path)
+        dataset_dict = load_from_disk(str(dataset_path))
+    else:
+        logging.info("Loading dataset %s (subset=%s)", args.dataset, args.subset)
+        dataset_dict = load_dataset(args.dataset, args.subset)
     if isinstance(dataset_dict, Dataset):
         dataset_dict = DatasetDict({"train": dataset_dict})
     elif not isinstance(dataset_dict, DatasetDict):

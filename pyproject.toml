@@ -196,6 +196,14 @@ include = [
     "scripts",
 ]
 
+# ty configuration
+[tool.ty.rules]
+# Temporary downgrade until torch.nn.Module.__setattr__ type stubs accept arbitrary
+# attribute values (see https://github.com/pytorch/pytorch/issues/166719 and
+# https://github.com/astral-sh/ty/issues/1460). Remove this override once
+# upstream ty/PyTorch stubs are fixed so we can re-enable the error-level check.
+unresolved-attribute = "ignore"
+
 [[tool.uv.index]]
 name = "torch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
@@ -243,6 +251,7 @@ dev = [
     #    "vllm>=0.9.0.1",
     "trafilatura>=2.0.0",
     "spacy>=3.8.7",
+    "ty>=0.0.1a25",
 ]
 
 flash-attn = [

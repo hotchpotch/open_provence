@@ -13,23 +13,29 @@ schema used by `hotchpotch/wip-msmarco-context-relevance`.
 from __future__ import annotations
 
 import argparse
+import importlib
 import logging
 import re
 from collections.abc import Callable
 from pathlib import Path
-from typing import cast
+from typing import Any, cast
 
 from datasets import Dataset, DatasetDict, load_dataset, load_from_disk
 
 try:
-    from fast_bunkai import FastBunkai  # type: ignore
+    _fast_bunkai_module = importlib.import_module("fast_bunkai")
 except ImportError:  # pragma: no cover - optional dependency
     FastBunkai = None
+else:
+    FastBunkai = getattr(_fast_bunkai_module, "FastBunkai", None)
 
+_SentTokenizeType = Callable[[str], list[str]] | None
 try:
-    from nltk import sent_tokenize  # type: ignore
+    _nltk_module = importlib.import_module("nltk")
 except ImportError:  # pragma: no cover - optional dependency
     sent_tokenize = None
+else:
+    sent_tokenize = getattr(_nltk_module, "sent_tokenize", None)
 
 
 SentenceSplitter = Callable[[str], list[str]]
@@ -78,6 +84,7 @@ def _build_nltk_sentence_splitter(language_name: str) -> SentenceSplitter:
     def _splitter(text: str) -> list[str]:
         if not text:
             return []
+        assert sent_tokenize is not None  # Guarded above
         sentences = [
             sentence.strip()
             for sentence in sent_tokenize(text, language=language_name)

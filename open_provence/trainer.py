@@ -348,6 +348,8 @@ class PruningTrainingArguments(TrainingArguments):
 class OpenProvenceTrainer(Trainer):
     """Custom Trainer that uses OpenProvenceTrainer internally for compatibility."""
 
+    loss_fn: OpenProvenceLoss | None
+
     def __init__(self, *args, loss_fn=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.loss_fn = loss_fn
@@ -424,6 +426,12 @@ class OpenProvenceTrainer(Trainer):
         for key in labels:
             if isinstance(labels[key], torch.Tensor):
                 labels[key] = labels[key].to(model.device)
+
+        if self.loss_fn is None:
+            raise RuntimeError(
+                "OpenProvenceTrainer.loss_fn is not set. Pass `loss_fn=OpenProvenceLoss(...)`"
+                " when constructing the trainer."
+            )
 
         # Compute loss
         loss = self.loss_fn(sentence_features, labels)
@@ -525,9 +533,11 @@ class OpenProvenceTrainer(Trainer):
 
         # Calculate average loss components and add to metrics
         if self._eval_loss_components:
+            metrics = dict(output.metrics or {})
             for name, values in self._eval_loss_components.items():
                 avg_value = sum(values) / len(values)
-                output.metrics[f"eval_{name}"] = avg_value
+                metrics[f"eval_{name}"] = avg_value
+            output = output._replace(metrics=metrics)
 
         return output
 
@@ -923,10 +933,20 @@ def prepare_dataset(data_args: DataArguments, seed: int = 42) -> tuple[Any, Any]
         dataset_name = dataset_config.get("dataset_name")
         subset = dataset_config.get("subset")
         teacher_column = dataset_config.get("teacher_column", "teacher_score")
+        dataset_id = f"{dataset_name}:{subset}" if dataset_name else subset or "train"
         items_per_query = dataset_config.get("items", data_args.items)
+        try:
+            items_per_query_value = (
+                int(items_per_query)
+                if items_per_query is not None
+                else None
+            )
+        except (TypeError, ValueError) as exc:  # pragma: no cover - defensive
+            raise ValueError(
+                f"Invalid 'items' value {items_per_query!r} for {dataset_id}; expected an integer"
+            ) from exc
         upsample_factor = dataset_config.get("upsample_factor", data_args.upsample_factor)
         sample_size = dataset_config.get("n_samples")
-        dataset_id = f"{dataset_name}:{subset}" if dataset_name else subset or "train"
         train_sampling_ratio: float | None = None
 
         dataset = _load_dataset_dict(dataset_name, subset)
@@ -952,13 +972,13 @@ def prepare_dataset(data_args: DataArguments, seed: int = 42) -> tuple[Any, Any]
                 f"  → {dataset_name}:{subset} train: {original_train_size:,} → {filtered_train_size:,} samples ({filtered_train_size / original_train_size * 100:.1f}% retained)"
             )
 
-        if items_per_query is not None:
+        if items_per_query_value is not None:
             logger.info(
-                f"Applying 'items' sampling to {dataset_name}:{subset} train set (items={items_per_query})"
+                f"Applying 'items' sampling to {dataset_name}:{subset} train set (items={items_per_query_value})"
             )
             train_ds = sample_items_by_label_priority(
                 train_ds,
-                items_per_query,
+                items_per_query_value,
                 seed=seed,
                 label_column="labels",
                 num_proc=num_proc,
@@ -1044,13 +1064,13 @@ def prepare_dataset(data_args: DataArguments, seed: int = 42) -> tuple[Any, Any]
                     f"  → {dataset_name}:{subset} {eval_split}: {original_eval_size:,} → {filtered_eval_size:,} samples ({filtered_eval_size / original_eval_size * 100:.1f}% retained)"
                 )
 
-            if items_per_query is not None:
+            if items_per_query_value is not None:
                 logger.info(
-                    f"Applying 'items' sampling to {dataset_name}:{subset} {eval_split} set (items={items_per_query})"
+                    f"Applying 'items' sampling to {dataset_name}:{subset} {eval_split} set (items={items_per_query_value})"
                 )
                 eval_ds = sample_items_by_label_priority(
                     eval_ds,
-                    items_per_query,
+                    items_per_query_value,
                     seed=seed,
                     label_column="labels",
                     num_proc=num_proc,

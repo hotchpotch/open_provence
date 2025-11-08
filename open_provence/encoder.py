@@ -12,7 +12,7 @@ import logging
 from collections import OrderedDict
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, Literal, cast
 
 import numpy as np
 import torch
@@ -24,6 +24,9 @@ from transformers import (
     AutoConfig,
     AutoModelForSequenceClassification,
     AutoTokenizer,
+    PreTrainedModel,
+    PreTrainedTokenizerBase,
+    PretrainedConfig,
 )
 
 from .data_structures import (
@@ -46,6 +49,20 @@ logger = logging.getLogger(__name__)
 
 
 class OpenProvenceEncoder(nn.Module):
+    model_name_or_path: str
+    mode: Literal["reranking_pruning"]
+    num_labels: int
+    max_length: int
+    device: str | torch.device
+    cache_dir: str | None
+    tokenizer: PreTrainedTokenizerBase
+    config: PretrainedConfig
+    ranking_model: PreTrainedModel
+    _original_num_labels: int
+    pruning_head: OpenProvenceHead
+    text_chunker: Any | None
+    use_raw_logits: bool
+    pruning_config: DataOpenProvenceConfig
     """
     OpenProvenceEncoder performs query-dependent text pruning with reranking.
 
@@ -88,8 +105,9 @@ class OpenProvenceEncoder(nn.Module):
         self.model_name_or_path = model_name_or_path
         self.mode = "reranking_pruning"
         self.num_labels = num_labels
+        resolved_device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.max_length = max_length
-        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = resolved_device
         self.cache_dir = cache_dir
 
         # Default configs
@@ -1017,13 +1035,15 @@ class OpenProvenceEncoder(nn.Module):
             actual_destination = cast(OrderedDict[str, torch.Tensor] | None, args[0])
             remaining_args = args[1:]
 
+        state_dict_kwargs: dict[str, Any] = {"prefix": prefix, "keep_vars": keep_vars}
+        if actual_destination is not None:
+            state_dict_kwargs["destination"] = actual_destination
+
         base_state_dict = cast(
             OrderedDict[str, torch.Tensor],
             self.ranking_model.state_dict(
                 *remaining_args,
-                destination=actual_destination,
-                prefix=prefix,
-                keep_vars=keep_vars,
+                **state_dict_kwargs,
             ),
         )
 
@@ -1229,6 +1249,6 @@ class OpenProvenceEncoder(nn.Module):
         self.ranking_model.to(*args, **kwargs)
         self.pruning_head.to(*args, **kwargs)  # type: ignore[misc]
         candidate = args[0] if args else kwargs.get("device")
-        if isinstance(candidate, str | torch.device):
+        if isinstance(candidate, (str, torch.device)):
             self.device = candidate
         return self

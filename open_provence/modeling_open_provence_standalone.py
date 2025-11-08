@@ -16,6 +16,7 @@ checkpoints remain portable.
 from __future__ import annotations
 
 import contextlib
+import importlib
 import logging
 import math
 import os
@@ -340,9 +341,11 @@ def resolve_inference_device(device: str | torch.device | None) -> torch.device:
 
 
 try:
-    from fast_bunkai import FastBunkai
+    _fast_bunkai_module = importlib.import_module("fast_bunkai")
 except ImportError:  # pragma: no cover - optional dependency
     FastBunkai = None
+else:
+    FastBunkai = getattr(_fast_bunkai_module, "FastBunkai", None)
 
 
 _FAST_BUNKAI = None

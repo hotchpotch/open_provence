@@ -23,6 +23,7 @@ Example:
 from __future__ import annotations
 
 import argparse
+import importlib
 import json
 import logging
 import re
@@ -34,7 +35,29 @@ from typing import Any, cast
 
 from datasets import Dataset, DatasetDict, load_from_disk
 from transformers import AutoTokenizer
-from vllm import LLM, SamplingParams
+
+try:
+    _vllm = importlib.import_module("vllm")
+except ImportError:  # pragma: no cover - optional dependency
+    class _MissingVLLM:
+        def __init__(self, *args: Any, **kwargs: Any) -> None:  # noqa: D401 - helper
+            raise ImportError(
+                "vLLM is required to run add_context_spans_relevance.py. Install vllm before "
+                "invoking this script."
+            )
+
+    class _MissingSamplingParams:
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
+            raise ImportError(
+                "vLLM is required to run add_context_spans_relevance.py. Install vllm before "
+                "invoking this script."
+            )
+
+    LLM = _MissingVLLM  # type: ignore[assignment]
+    SamplingParams = _MissingSamplingParams  # type: ignore[assignment]
+else:
+    LLM = cast(type[Any], getattr(_vllm, "LLM"))
+    SamplingParams = cast(type[Any], getattr(_vllm, "SamplingParams"))
 
 logger = logging.getLogger(__name__)
 
@@ -243,8 +266,8 @@ class RelevanceLabeler:
     def __init__(self, config: Config):
         self.config = config
         self.tokenizer: AutoTokenizer | None = None
-        self.llm: LLM | None = None
-        self.sampling_params: SamplingParams | None = None
+        self.llm: Any | None = None
+        self.sampling_params: Any | None = None
 
     def initialize(self) -> None:
         if self.llm is not None:

@@ -166,35 +166,59 @@ def main() -> None:
         "Prepared dataset with %d rows (estimated size: %s)", total_rows, format_size(total_size)
     )
 
-    base_kwargs = {
-        "repo_id": args.repo_id,
-        "config_name": args.subset,
-        "commit_message": args.commit_message,
-        "commit_description": args.commit_description,
-        "private": None if args.public else True,
-        "token": args.token,
-        "revision": args.revision,
-        "max_shard_size": args.max_shard_size,
-        "num_shards": args.num_shards,
-        "embed_external_files": not args.no_embed,
-    }
-
     if args.split:
         logger.info("Uploading single split '%s'", args.split)
         target_dataset = dataset[args.split]
-        upload_kwargs = {**base_kwargs, "split": args.split}
-        logger.info("Upload parameters: %s", upload_kwargs)
+        logger.info(
+            "Upload parameters: repo_id=%s config=%s split=%s max_shard_size=%s num_shards=%s",
+            args.repo_id,
+            args.subset,
+            args.split,
+            args.max_shard_size,
+            args.num_shards,
+        )
         if args.dry_run:
             logger.info("Dry run enabled; skipping push_to_hub call.")
             return
-        commit_info = target_dataset.push_to_hub(**upload_kwargs)
+        commit_info = target_dataset.push_to_hub(
+            repo_id=args.repo_id,
+            config_name=args.subset,
+            split=args.split,
+            commit_message=args.commit_message,
+            commit_description=args.commit_description,
+            private=None if args.public else True,
+            token=args.token,
+            revision=args.revision,
+            max_shard_size=args.max_shard_size,
+            num_shards=args.num_shards,
+            embed_external_files=not args.no_embed,
+        )
     else:
         logger.info("Uploading all splits for DatasetDict")
-        logger.info("Upload parameters: %s", base_kwargs)
+        logger.info(
+            "Upload parameters: repo_id=%s config=%s max_shard_size=%s",
+            args.repo_id,
+            args.subset,
+            args.max_shard_size,
+        )
         if args.dry_run:
             logger.info("Dry run enabled; skipping push_to_hub call.")
             return
-        commit_info = dataset.push_to_hub(**base_kwargs)
+        if args.num_shards is not None:
+            logger.warning(
+                "DatasetDict.push_to_hub expects a dict for num_shards; ignoring provided --num-shards"
+            )
+        commit_info = dataset.push_to_hub(
+            repo_id=args.repo_id,
+            config_name=args.subset,
+            commit_message=args.commit_message,
+            commit_description=args.commit_description,
+            private=None if args.public else True,
+            token=args.token,
+            revision=args.revision,
+            max_shard_size=args.max_shard_size,
+            embed_external_files=not args.no_embed,
+        )
 
     logger.info("Upload complete: %s", commit_info)
 

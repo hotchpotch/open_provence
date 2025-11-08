@@ -9,6 +9,7 @@ and BERT-like models.
 from __future__ import annotations
 
 import logging
+from collections.abc import Iterable
 from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
@@ -52,9 +53,19 @@ class ModelArchitectureUtils:
 
         # Check for specific patterns
         for arch_name, patterns in ModelArchitectureUtils.ARCHITECTURE_PATTERNS.items():
-            identifiers = patterns["identifiers"]
+            identifiers_raw = patterns.get("identifiers")
+            if identifiers_raw is None:
+                continue
+            if isinstance(identifiers_raw, str):
+                identifiers_iterable = [identifiers_raw]
+            elif isinstance(identifiers_raw, Iterable):
+                identifiers_iterable = list(identifiers_raw)
+            else:
+                continue
+
             if all(
-                any(identifier in key for key in state_dict_keys) for identifier in identifiers
+                any(identifier in key for key in state_dict_keys)
+                for identifier in identifiers_iterable
             ):
                 logger.info(f"Detected {arch_name} architecture")
                 return arch_name

@@ -14,11 +14,12 @@ import shutil
 import subprocess
 import sys
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, cast
 
 import torch
 import yaml
-from datasets import Dataset, DatasetDict, concatenate_datasets, load_dataset
+from datasets import Dataset, DatasetDict, concatenate_datasets, load_dataset, load_from_disk
 from transformers import AutoConfig
 from transformers.trainer import Trainer
 from transformers.trainer_utils import set_seed
@@ -38,12 +39,22 @@ try:
 except ImportError:
     _wandb_available = False
 
-from pathlib import Path
-
 from .modeling_open_provence_standalone import OpenProvenceConfig
 from .utils.modeling_export import write_modeling_open_provence
 
 logger = logging.getLogger(__name__)
+
+
+def _load_dataset_dict(dataset_name: str | None, subset: str | None) -> DatasetDict:
+    """Load a dataset from Hugging Face or a local ``datasets.save_to_disk`` directory."""
+
+    if dataset_name:
+        dataset_path = Path(dataset_name).expanduser()
+        if dataset_path.exists():
+            logger.info("Loading local dataset from %s", dataset_path)
+            return cast(DatasetDict, load_from_disk(str(dataset_path)))
+
+    return cast(DatasetDict, load_dataset(dataset_name or "", subset or None))
 
 
 def _sample_dataset_randomly(
@@ -910,7 +921,7 @@ def prepare_dataset(data_args: DataArguments, seed: int = 42) -> tuple[Any, Any]
         dataset_id = f"{dataset_name}:{subset}" if dataset_name else subset or "train"
         train_sampling_ratio: float | None = None
 
-        dataset = cast(DatasetDict, load_dataset(dataset_name or "", subset or None))
+        dataset = _load_dataset_dict(dataset_name, subset)
 
         # Process train dataset
         train_ds = cast(Dataset, dataset["train"])  # type: ignore[index]

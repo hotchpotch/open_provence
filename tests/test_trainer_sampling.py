@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+from pathlib import Path
 from typing import Any, cast
 
 import pytest
@@ -63,6 +64,29 @@ def _build_dataset(size: int = 10, validation_size: int = 6) -> DatasetDict:
             "validation": Dataset.from_dict(validation),
         }
     )
+
+
+def test_prepare_dataset_supports_local_paths(tmp_path: Path) -> None:
+    dataset = _build_dataset()
+    dataset_path = tmp_path / "local_ds"
+    dataset.save_to_disk(dataset_path)
+
+    data_args = DataArguments(
+        dataset_name="unused",
+        subset="default",
+        teacher_column="teacher_score",
+        datasets=[
+            {
+                "dataset_name": str(dataset_path),
+                "teacher_column": "teacher_score",
+            }
+        ],
+    )
+
+    train_dataset, eval_dataset = prepare_dataset(data_args, seed=13)
+
+    assert len(train_dataset) == len(dataset["train"])
+    assert len(eval_dataset) == len(dataset["validation"])
 
 
 def test_prepare_dataset_applies_n_samples(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -111,25 +111,47 @@ Additional parameters for debugging, custom splitters, preprocessing workers, an
 
 ## 🧰 Environment Setup
 
-### Base environment (CPU / Metal)
+### Base environment (Linux GPU / CUDA 12.8 default)
 
-Run `uv sync`. This installs the CPU-only build `torch==2.7.1`, which supports Linux, Windows, and macOS (including Apple Silicon via Metal acceleration).
+Run `uv sync`. By default uv now enables the `dev` and `cuda` dependency groups, so the resolver pulls
+`torch==2.7.1+cu128` and the matching `nvidia-*` runtime wheels from the `torch-cu128` index whenever
+you're on Linux x86_64. Make sure your NVIDIA driver supports CUDA 12.8 (driver ≥ 550.54) before
+activating the environment.
 
-### Linux GPU host (CUDA 12.8)
+- Add FlashAttention during the initial sync with `uv sync --group flash-attn` (the `cuda` group is
+  already active).
+- Set `UV_PROJECT_ENVIRONMENT=dev,cuda` if you prefer to encode the default in your shell profile.
 
-1. Fresh install: `uv sync --group cuda` to resolve `torch` from the CUDA 12.8 wheels defined in
-   `pyproject.toml`.
-2. Converting an existing CPU environment: run `uv sync` once, then replace the wheel manually:
-   ```bash
-   uv pip install --index https://download.pytorch.org/whl/cu128 --index-strategy unsafe-best-match "torch==2.7.1+cu128"
-   ```
-   This command also installs the matching `nvidia-*` runtime libraries.
-3. (Optional) Install flash attention kernels:
-   - Using FlashAttention speeds up training and inference
-   - New install: `uv sync --group cuda --group flash-attn`
-   - If the PyPI extra works on your GPU: `uv sync --group flash-attn`
-   - If you prefer an official wheel: download the match for your platform from https://github.com/Dao-AILab/flash-attention/releases (e.g. save it under `./tmp/`) and install with `uv pip install ./tmp/<wheel-name.whl>`
-   - If you maintain a vetted wheel locally: `uv pip install ./tmp/flash_attn-2.8.3+cu12torch2.7cxx11abiTRUE-cp311-cp311-linux_x86_64.whl`
+### CPU / Metal hosts
+
+If you are on CPU-only Linux, Windows, or macOS, opt out of the CUDA group explicitly:
+
+```bash
+uv sync --no-default-groups --group dev --group cpu
+```
+
+The same flag combination keeps the resolver on the CPU/Metal `torch==2.7.1` wheel. You can also set
+`UV_PROJECT_ENVIRONMENT=dev,cpu` to make this persistent.
+
+### Migrating an existing CPU environment to CUDA
+
+If you previously synced the CPU environment and want to flip it to CUDA without recreating the venv,
+install the GPU wheel directly:
+
+```bash
+uv pip install --index https://download.pytorch.org/whl/cu128 --index-strategy unsafe-best-match "torch==2.7.1+cu128"
+```
+
+This command also installs the matching `nvidia-*` runtime libraries.
+
+### FlashAttention kernels (optional)
+
+- Using FlashAttention speeds up training and inference.
+- Fresh install: `uv sync --group flash-attn`.
+- If the PyPI extra works on your GPU but you prefer to keep `uv sync` vanilla, run `uv sync` first and
+  then `uv sync --group flash-attn` to add the kernels.
+- If you prefer an official wheel: download the match for your platform from https://github.com/Dao-AILab/flash-attention/releases (e.g. save it under `./tmp/`) and install with `uv pip install ./tmp/<wheel-name.whl>`.
+- If you maintain a vetted wheel locally: `uv pip install ./tmp/flash_attn-2.8.3+cu12torch2.7cxx11abiTRUE-cp311-cp311-linux_x86_64.whl`.
 
 
 ## 📊 Evaluation Summary

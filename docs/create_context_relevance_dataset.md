@@ -40,7 +40,7 @@ create them; otherwise the upstream splits are preserved as-is.
 ## 2. Prerequisites
 
 ```bash
-uv sync                              # install project dependencies
+uv sync                              # installs CUDA-enabled deps on Linux x86_64
 huggingface-cli login                # required if the source dataset is private
 uv run pip install nltk fast-bunkai  # sentence splitters (punkt for en, bunkai for ja)
 uv pip install vllm                  # optional, only needed for LLM helpers
@@ -52,6 +52,7 @@ uv run python -m nltk.downloader punkt  # required for --lang en
 > isolated from the main project tooling.
 ```
 
+- CPU / Metal hosts: use `uv sync --no-default-groups --group dev --group cpu` if you cannot install CUDA wheels.
 - English (`--lang en`) requires NLTK punkt.
 - Japanese (`--lang ja`) requires `fast-bunkai`.
 - The converter fails fast if the required splitter is not available.

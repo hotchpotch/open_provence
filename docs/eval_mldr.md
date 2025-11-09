@@ -26,6 +26,8 @@ By default we evaluate `test[:200]`, but you can point the script at any MLDR sl
    ```bash
    uv sync
    ```
+   On Linux x86_64 this resolves the CUDA 12.8 wheel by default; pass `--no-default-groups --group dev --group cpu`
+   if you need a CPU/Metal-only setup.
 2. **Credentials**
    - Hugging Face account (for dataset/model downloads, optional if cached).
    - OpenAI API key exported as `OPENAI_API_KEY` (LiteLLM forwards requests to `gpt-5-nano` by default).

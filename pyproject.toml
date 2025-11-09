@@ -213,7 +213,7 @@ torch = [
 ]
 
 [tool.uv]
-default-groups = ["dev"]
+default-groups = ["dev", "cuda"]
 conflicts = [
     [
         { group = "cpu" },

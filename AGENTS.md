@@ -17,7 +17,7 @@
 - **Release Flow**: Successful checkpoints move from `output/<config>_<timestamp>/final_model/` into `output/release_models/<name>/`, bundling the standalone modeling file and evaluation artefacts before publishing to Hugging Face.
 
 ## Environment Setup
-- Install dependencies with `uv sync`. This pulls the CPU/Metal build of `torch==2.7.1`; use `uv sync --group cuda` on CUDA 12.8 hosts to pull the matching GPU wheel from the configured index.
+- Install dependencies with `uv sync`. By default this now resolves the CUDA 12.8 wheel (`torch==2.7.1+cu128`) on Linux x86_64; use `uv sync --no-default-groups --group dev --group cpu` when you need the CPU/Metal build instead.
 - If you need to pin a specific CUDA wheel manually after syncing, run:
   ```bash
   uv pip install --index https://download.pytorch.org/whl/cu128 --index-strategy unsafe-best-match "torch==2.7.1+cu128"

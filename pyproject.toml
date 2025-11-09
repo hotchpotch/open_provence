@@ -33,7 +33,7 @@ classifiers = [
 dependencies = [
     "transformers>=4.57.1",
     "tqdm",
-    "torch>=2.7.1,<2.7.2",
+    "torch>=2.8.0,<2.9",
     "scikit-learn",
     "scipy",
     "huggingface-hub>=0.20.0",
@@ -223,11 +223,11 @@ conflicts = [
 
 [dependency-groups]
 cpu = [
-    "torch>=2.7.1,<2.7.2",
+    "torch>=2.8.0,<2.9",
 ]
 
 cuda = [
-    "torch>=2.7.1,<2.7.2",
+    "torch>=2.8.0,<2.9",
 ]
 
 dev = [

@@ -114,7 +114,7 @@ Additional parameters for debugging, custom splitters, preprocessing workers, an
 ### Base environment (Linux GPU / CUDA 12.8 default)
 
 Run `uv sync`. By default uv now enables the `dev` and `cuda` dependency groups, so the resolver pulls
-`torch==2.7.1+cu128` and the matching `nvidia-*` runtime wheels from the `torch-cu128` index whenever
+`torch==2.8.0+cu128` and the matching `nvidia-*` runtime wheels from the `torch-cu128` index whenever
 you're on Linux x86_64. Make sure your NVIDIA driver supports CUDA 12.8 (driver ≥ 550.54) before
 activating the environment.
 
@@ -130,7 +130,7 @@ If you are on CPU-only Linux, Windows, or macOS, opt out of the CUDA group expli
 uv sync --no-default-groups --group dev --group cpu
 ```
 
-The same flag combination keeps the resolver on the CPU/Metal `torch==2.7.1` wheel; rerun it whenever
+The same flag combination keeps the resolver on the CPU/Metal `torch==2.8.0` wheel; rerun it whenever
 you need to refresh a CPU-only environment.
 
 ### Migrating an existing CPU environment to CUDA
@@ -139,7 +139,7 @@ If you previously synced the CPU environment and want to flip it to CUDA without
 install the GPU wheel directly:
 
 ```bash
-uv pip install --index https://download.pytorch.org/whl/cu128 --index-strategy unsafe-best-match "torch==2.7.1+cu128"
+uv pip install --index https://download.pytorch.org/whl/cu128 --index-strategy unsafe-best-match "torch==2.8.0+cu128"
 ```
 
 This command also installs the matching `nvidia-*` runtime libraries.
@@ -151,7 +151,7 @@ This command also installs the matching `nvidia-*` runtime libraries.
 - If the PyPI extra works on your GPU but you prefer to keep `uv sync` vanilla, run `uv sync` first and
   then `uv sync --group flash-attn` to add the kernels.
 - If you prefer an official wheel: download the match for your platform from https://github.com/Dao-AILab/flash-attention/releases (e.g. save it under `./tmp/`) and install with `uv pip install ./tmp/<wheel-name.whl>`.
-- If you maintain a vetted wheel locally: `uv pip install ./tmp/flash_attn-2.8.3+cu12torch2.7cxx11abiTRUE-cp311-cp311-linux_x86_64.whl`.
+- If you maintain a vetted wheel locally: `uv pip install ./tmp/flash_attn-2.8.3+cu12torch2.8cxx11abiTRUE-cp311-cp311-linux_x86_64.whl`.
 
 
 ## 📊 Evaluation Summary

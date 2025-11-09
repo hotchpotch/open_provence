@@ -3,7 +3,7 @@
 This guide walks through the end-to-end process for training OpenProvence reranker–pruner models. It introduces the ready-made configs, explains the YAML structure, and highlights what to look for when validating a fresh run.
 
 ## Prerequisites
-- Run `uv sync` to install the base environment. On Linux x86_64 this now resolves the CUDA 12.8 wheel (`torch==2.7.1+cu128`); pass `--no-default-groups --group dev --group cpu` if you need the CPU/Metal wheel instead.
+- Run `uv sync` to install the base environment. On Linux x86_64 this now resolves the CUDA 12.8 wheel (`torch==2.8.0+cu128`); pass `--no-default-groups --group dev --group cpu` if you need the CPU/Metal wheel instead.
 - Sign in to the Hugging Face Hub if any referenced datasets require authentication.
 - Export `WANDB_API_KEY` when you want metrics in the shared Weights & Biases project.
 - Use a single NVIDIA GPU with ≥16 GB of memory; every recipe in this guide fits that footprint. **Installing FlashAttention (`uv sync --group flash-attn` or by adding the vetted wheel in `tmp/`) delivers a noticeable speed-up.**

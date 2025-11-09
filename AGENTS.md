@@ -17,12 +17,12 @@
 - **Release Flow**: Successful checkpoints move from `output/<config>_<timestamp>/final_model/` into `output/release_models/<name>/`, bundling the standalone modeling file and evaluation artefacts before publishing to Hugging Face.
 
 ## Environment Setup
-- Install dependencies with `uv sync`. By default this now resolves the CUDA 12.8 wheel (`torch==2.7.1+cu128`) on Linux x86_64; use `uv sync --no-default-groups --group dev --group cpu` when you need the CPU/Metal build instead.
+- Install dependencies with `uv sync`. By default this now resolves the CUDA 12.8 wheel (`torch==2.8.0+cu128`) on Linux x86_64; use `uv sync --no-default-groups --group dev --group cpu` when you need the CPU/Metal build instead.
 - If you need to pin a specific CUDA wheel manually after syncing, run:
   ```bash
-  uv pip install --index https://download.pytorch.org/whl/cu128 --index-strategy unsafe-best-match "torch==2.7.1+cu128"
+  uv pip install --index https://download.pytorch.org/whl/cu128 --index-strategy unsafe-best-match "torch==2.8.0+cu128"
   ```
-  Optional: install FlashAttention via `uv sync --group flash-attn` or a vetted wheel in `tmp/`.
+  Optional: install FlashAttention via `uv sync --group flash-attn` or a vetted wheel in `tmp/` such as `uv pip install ./tmp/flash_attn-2.8.3+cu12torch2.8cxx11abiTRUE-cp311-cp311-linux_x86_64.whl`.
 - Export credentials used by the tooling: `WANDB_API_KEY`, Hugging Face token (`huggingface-cli login`), and (for MLDR LLM judging) `OPENAI_API_KEY`.
 - Use local virtualenv isolation (`uv`) and avoid polluting the repo with global cache files; large downloads belong under `output/`, `wandb/`, or `tmp/`.
 
@@ -50,6 +50,7 @@
   documented baselines (F2 ≈ 0.80 en / 0.79 ja at threshold 0.1).
 - Archive artefacts under `output/<config>_<timestamp>/final_model/` and sync Weights & Biases runs (`toy-open-provence-reranker-*-20251029-*`) for traceability.
 - When PRs alter model behaviour, summarize the training command, threshold metrics, and any evaluation deltas directly in the PR body, citing the artefacts. Block merges if the nano checks regress materially.
+- Before drafting a PR description, read the five most recently merged PRs and mirror their structure. Start the PR body by clearly stating why the change is necessary before explaining what changed.
 
 ## Evaluation Pipelines
 - Dataset-level pruning checks: follow `docs/eval_dataset.md` and run
